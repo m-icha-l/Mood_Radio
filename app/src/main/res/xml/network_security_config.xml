@@ -1,0 +1,5 @@
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">wr2.downtime.fi</domain>
+    </domain-config>
+</network-security-config>
