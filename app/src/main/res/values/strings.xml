@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Wake_up_radio</string>
+    <string-array name="radio_links">
+        <item>https://wr2.downtime.fi/kaakko.aac</item>
+        <item>https://iradio.fi/klasu-hi.mp3</item>
+        <item>https://streaming.radiostreamlive.com/radiosantaclaus_devices</item>
+        <item>https://radio.kyoi.ru:8002/;</item>
+        <item>https://s3.myradiostream.com/:4976/</item>
+        <item>https://stream.protonbroadcast.com:8443/ramona.mp3</item>
+    </string-array>
+    <string-array name="radio_names">
+        <item>Radio Kaakko</item> //my fav
+        <item>Rondo Classic Klasu</item> // classic muic
+        <item>Radio Santa Claus</item>
+        <item>KYOI</item> //90s
+        <item>Sea FM</item> // oulu pop
+        <item>Radio Ramona</item> // suomi pop
+    </string-array>
 </resources>
