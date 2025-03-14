@@ -56,11 +56,21 @@ class Model_logic(context: Context) : ViewModel() {
         }
     }
 
-    fun addRadioStation(newLink: String, newName: String) {
+    fun add_Radio_Station(newLink: String, newName: String) {
         val radioData = loadRadioData()
         if (!radioData.radio_links.contains(newLink)) {
             radioData.radio_links.add(newLink)
             radioData.radio_names.add(newName)
+            saveRadioData(radioData)
+        }
+    }
+    fun remove_Radio_Station(newLink: String, newName: String) {
+        val radioData = loadRadioData()
+
+        val index = radioData.radio_links.indexOf(newLink)
+        if (index != -1) {
+            radioData.radio_links.removeAt(index)
+            radioData.radio_names.removeAt(index) // Remove the corresponding name at the same index
             saveRadioData(radioData)
         }
     }
