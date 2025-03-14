@@ -101,7 +101,7 @@ fun RadioPlayerScreen(navController: NavController, modifier: Modifier = Modifie
                 modifier = Modifier
                     .menuAnchor() // Wymagane dla Material3
                     .clickable { expandedFavorites = true }, // Kliknięcie otwiera menu
-                label = { Text("Wybierz ulubione radio") },
+                label = { Text("Choose your Radio") },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
@@ -120,8 +120,8 @@ fun RadioPlayerScreen(navController: NavController, modifier: Modifier = Modifie
                         text = { Text(radio) },
                         onClick = {
                             selectedOption_new = radio
-                            myViewModel.change_radio(links_new[index]) // Pobierz link
-                            expandedFavorites = false // Zamknij dropdown
+                            myViewModel.change_radio(links_new[index])
+                            expandedFavorites = false
                         }
                     )
                 }
@@ -137,33 +137,31 @@ fun RadioPlayerScreen(navController: NavController, modifier: Modifier = Modifie
             TextField(
                 value = selectedOption,
                 onValueChange = {},
-                readOnly = true, // Zapobiega ręcznej edycji
+                readOnly = true,
                 modifier = Modifier
-                    .menuAnchor() // Wymagane dla Material3
-                    .clickable { expandedAll = true }, // Kliknięcie otwiera menu
-                label = { Text("Wybierz radio") },
+                    .menuAnchor()
+                    .clickable { expandedAll = true },
+                label = { Text("Choose radio from default stations") },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Expand",
-                        modifier = Modifier.clickable { expandedAll = true } // Kliknięcie również rozwija
+                        modifier = Modifier.clickable { expandedAll = true }
                     )
                 }
             )
-
-            // Menu Dropdown
             ExposedDropdownMenu(
                 expanded = expandedAll,
-                onDismissRequest = { expandedAll = false } // Zamknięcie menu po kliknięciu poza
+                onDismissRequest = { expandedAll = false }
             ) {
                 radioNames.forEach { radio ->
                     DropdownMenuItem(
                         text = { Text(radio) },
                         onClick = {
-                            selectedOption = radio // Ustawienie wybranego radia
+                            selectedOption = radio
                             val index = radioNames.indexOf(radio)
                             myViewModel.change_radio(radioLinks[index])
-                            expandedAll = false // Zamknięcie dropdowna po wyborze
+                            expandedAll = false
                         }
                     )
                 }
@@ -177,7 +175,7 @@ fun RadioPlayerScreen(navController: NavController, modifier: Modifier = Modifie
 
         // Przycisk nawigacyjny
         Button(onClick = { navController.navigate("first_screen") }) {
-            Text("Idź do drugiego ekranu")
+            Text("Go to Radio Menager")
         }
     }
 }
@@ -245,7 +243,7 @@ fun First_Screen(navController: NavController) {
                 modifier = Modifier
                     .menuAnchor()
                     .clickable { expandedFavorites = true },
-                label = { Text("Wybierz ulubione radio") },
+                label = { Text("Choose Radio") },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
@@ -263,6 +261,7 @@ fun First_Screen(navController: NavController) {
                     DropdownMenuItem(
                         text = { Text(radio) },
                         onClick = {
+                            selectedOption_new = radio
                             selectedOption_new = radio
                             del_radio = radio
                             expandedFavorites = false
@@ -291,7 +290,7 @@ fun First_Screen(navController: NavController) {
             Text("Delete selected radio")
         }
         Button(onClick = { navController.navigate("home") }) {
-            Text("Go to Second Screen")
+            Text("Go to Home Screen")
         }
     }
 }
