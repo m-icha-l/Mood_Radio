@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.material3)
     implementation(libs.androidx.compose.material3.material3.v100)
+    implementation(libs.androidx.material)
     implementation(libs.ui)
     implementation(libs.androidx.navigation.compose.v240alpha10)
     implementation(libs.gson)

@@ -5,20 +5,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,12 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.wake_up_radio.ui.theme.Wake_up_radioTheme
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-
-import androidx.compose.runtime.Composable
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,246 +41,222 @@ class ModelFactory(private val context: Context) : ViewModelProvider.Factory {
     }
 }
 
-
 @Composable
 fun NavigationGraph() {
-    // Create the NavController to manage navigation
     val navController = rememberNavController()
-
-    // Set up the navigation host
     NavHost(navController = navController, startDestination = "home") {
-        // Define Composables for each route
         composable("home") { RadioPlayerScreen(navController) }
-        composable("first_screen") { First_Screen(navController) }
+        composable("first_screen") { FirstScreen(navController) }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RadioPlayerScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-     // Tworzenie ViewModel
-    val myViewModel: Model_logic = viewModel(factory = ModelFactory(context))
-    val isPlaying by myViewModel::isPlaying // Obserwacja stanu
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val radioNames = context.resources.getStringArray(R.array.radio_names)
-        val radioLinks = context.resources.getStringArray(R.array.radio_links)
-        var selectedOption by remember { mutableStateOf(radioNames[0]) }
-
-        val names_new = myViewModel.get_radio_names()
-        val links_new = myViewModel.get_radio_links()
-        var selectedOption_new by remember { mutableStateOf(names_new.firstOrNull() ?: "No stations available") }
-
-        var expandedFavorites by remember { mutableStateOf(false) }
-        var expandedAll by remember { mutableStateOf(false) }
-
-        // ExposedDropdownMenuBox
-        ExposedDropdownMenuBox(
-            expanded = expandedFavorites,
-            onExpandedChange = { expandedFavorites = it }
-        ) {
-            TextField(
-                value = selectedOption_new,
-                onValueChange = {},
-                readOnly = true, // Zapobiega ręcznej edycji
-                modifier = Modifier
-                    .menuAnchor() // Wymagane dla Material3
-                    .clickable { expandedFavorites = true }, // Kliknięcie otwiera menu
-                label = { Text("Choose your Radio") },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Expand",
-                        modifier = Modifier.clickable { expandedFavorites = true } // Kliknięcie również rozwija
-                    )
-                }
-            )
-            // Menu Dropdown
-            ExposedDropdownMenu(
-                expanded = expandedFavorites,
-                onDismissRequest = { expandedFavorites = false } // Zamknięcie menu po kliknięciu poza
-            ) {
-                names_new.forEachIndexed { index, radio ->
-                    DropdownMenuItem(
-                        text = { Text(radio) },
-                        onClick = {
-                            selectedOption_new = radio
-                            myViewModel.change_radio(links_new[index])
-                            expandedFavorites = false
-                        }
-                    )
-                }
-            }
-        }
-
-
-
-        ExposedDropdownMenuBox(
-            expanded = expandedAll,
-            onExpandedChange = { expandedAll = it }
-        ) {
-            TextField(
-                value = selectedOption,
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier
-                    .menuAnchor()
-                    .clickable { expandedAll = true },
-                label = { Text("Choose radio from default stations") },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Expand",
-                        modifier = Modifier.clickable { expandedAll = true }
-                    )
-                }
-            )
-            ExposedDropdownMenu(
-                expanded = expandedAll,
-                onDismissRequest = { expandedAll = false }
-            ) {
-                radioNames.forEach { radio ->
-                    DropdownMenuItem(
-                        text = { Text(radio) },
-                        onClick = {
-                            selectedOption = radio
-                            val index = radioNames.indexOf(radio)
-                            myViewModel.change_radio(radioLinks[index])
-                            expandedAll = false
-                        }
-                    )
-                }
-            }
-        }
-
-        // Przycisk Play / Stop
-        Button(onClick = { myViewModel.pause_play() }) {
-            Text(if (isPlaying) "Stop" else "Play")
-        }
-
-        // Przycisk nawigacyjny
-        Button(onClick = { navController.navigate("first_screen") }) {
-            Text("Go to Radio Menager")
-        }
-    }
-}
-
-
-
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun First_Screen(navController: NavController) {
+fun RadioPlayerScreen(navController: NavController) {
     val context = LocalContext.current
     val myViewModel: Model_logic = viewModel(factory = ModelFactory(context))
     val isPlaying by myViewModel::isPlaying
 
+    val radioNames = context.resources.getStringArray(R.array.radio_names)
+    val radioLinks = context.resources.getStringArray(R.array.radio_links)
+    var selectedOption by remember { mutableStateOf(radioNames[0]) }
 
-    val names_new = myViewModel.get_radio_names()
-    val links_new = myViewModel.get_radio_links()
-    var selectedOption_new by remember { mutableStateOf(names_new.firstOrNull() ?: "No stations available") }
+    val namesNew = myViewModel.get_radio_names()
+    val linksNew = myViewModel.get_radio_links()
+    var selectedOptionNew by remember { mutableStateOf(namesNew.firstOrNull() ?: "No stations available") }
 
     var expandedFavorites by remember { mutableStateOf(false) }
-    var del_radio by remember { mutableStateOf("") }
+    var expandedAll by remember { mutableStateOf(false) }
 
-    // Simple UI for second screen
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var user_link by remember { mutableStateOf("") }
-        var user_radio_name by remember { mutableStateOf("") }
-        Text("Add your favorite Radio!")
-        TextField(
-            value = user_link,
-            onValueChange = { user_link = it },
-            label = { Text("Enter Radio URL") },
-            modifier = Modifier.fillMaxWidth()
+        CustomDropdownMenu(
+            label = "Choose your Radio",
+            options = namesNew,
+            selectedOption = selectedOptionNew,
+            onSelect = { index ->
+                selectedOptionNew = namesNew[index]
+                myViewModel.change_radio(linksNew[index])
+            },
+            expanded = expandedFavorites,
+            onExpandChange = { expandedFavorites = it }
         )
-        TextField(
-            value = user_radio_name,
-            onValueChange = { user_radio_name = it },
-            label = { Text("Enter Radio NAME") },
-            modifier = Modifier.fillMaxWidth()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomDropdownMenu(
+            label = "Choose from default stations",
+            options = radioNames.toList(),
+            selectedOption = selectedOption,
+            onSelect = { index ->
+                selectedOption = radioNames[index]
+                myViewModel.change_radio(radioLinks[index])
+            },
+            expanded = expandedAll,
+            onExpandChange = { expandedAll = it }
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { myViewModel.pause_play() },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (isPlaying) "Stop" else "Play")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = { navController.navigate("first_screen") },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Go to Radio Manager")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FirstScreen(navController: NavController) {
+    val context = LocalContext.current
+    val myViewModel: Model_logic = viewModel(factory = ModelFactory(context))
+    val isPlaying by myViewModel::isPlaying
+
+    val namesNew = myViewModel.get_radio_names()
+    val linksNew = myViewModel.get_radio_links()
+    var selectedOptionNew by remember { mutableStateOf(namesNew.firstOrNull() ?: "No stations available") }
+
+    var expandedFavorites by remember { mutableStateOf(false) }
+    var delRadio by remember { mutableStateOf("") }
+    var userLink by remember { mutableStateOf("") }
+    var userRadioName by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Add your favorite Radio!", style = MaterialTheme.typography.titleLarge)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        CustomTextField("Enter Radio URL", userLink) { userLink = it }
+        CustomTextField("Enter Radio Name", userRadioName) { userRadioName = it }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Button(
             onClick = {
-                if(isPlaying)
-                {
-                    myViewModel.pause_play()
-                }
-                myViewModel.add_Radio_Station(user_link,user_radio_name)
-        }) {
+                if (isPlaying) myViewModel.pause_play()
+                myViewModel.add_Radio_Station(userLink, userRadioName)
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Add your Radio")
         }
 
-        ExposedDropdownMenuBox(
+        Spacer(modifier = Modifier.height(22.dp))
+        Text("Remove one of added Radios", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(12.dp))
+        CustomDropdownMenu(
+            label = "Choose Radio",
+            options = namesNew,
+            selectedOption = selectedOptionNew,
+            onSelect = { index ->
+                selectedOptionNew = namesNew[index]
+                delRadio = namesNew[index]
+            },
             expanded = expandedFavorites,
-            onExpandedChange = { expandedFavorites = it }
+            onExpandChange = { expandedFavorites = it }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                if (isPlaying) myViewModel.pause_play()
+                val index = namesNew.indexOf(delRadio)
+                if (index != -1) myViewModel.remove_Radio_Station(linksNew[index], delRadio)
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            TextField(
-                value = selectedOption_new,
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier
-                    .menuAnchor()
-                    .clickable { expandedFavorites = true },
-                label = { Text("Choose Radio") },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Expand",
-                        modifier = Modifier.clickable { expandedFavorites = true }
-                    )
-                }
-            )
-            // Menu Dropdown
-            ExposedDropdownMenu(
-                expanded = expandedFavorites,
-                onDismissRequest = { expandedFavorites = false }
-            ) {
-                names_new.forEachIndexed { index, radio ->
-                    DropdownMenuItem(
-                        text = { Text(radio) },
-                        onClick = {
-                            selectedOption_new = radio
-                            selectedOption_new = radio
-                            del_radio = radio
-                            expandedFavorites = false
-                        }
-                    )
-                }
-            }
-        }
-        Button(onClick =
-        {
-            if(isPlaying)
-            {
-                myViewModel.pause_play()
-            }
-            if (del_radio.isNotEmpty())
-            {
-                val index = names_new.indexOf(del_radio)
-
-                if (index != -1) {
-                    myViewModel.remove_Radio_Station(links_new[index], del_radio)
-                }
-            }
-
-        })
-        {
             Text("Delete selected radio")
         }
-        Button(onClick = { navController.navigate("home") }) {
+
+        Spacer(modifier = Modifier.height(56.dp))
+
+        Button(
+            onClick = { navController.navigate("home") },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Go to Home Screen")
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomDropdownMenu(
+    label: String,
+    options: List<String>,
+    selectedOption: String,
+    onSelect: (Int) -> Unit,
+    expanded: Boolean,
+    onExpandChange: (Boolean) -> Unit
+) {
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = onExpandChange
+    ) {
+        TextField(
+            value = selectedOption,
+            onValueChange = {},
+            readOnly = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor()
+                .clickable { onExpandChange(true) },
+            label = { Text(label) },
+            trailingIcon = {
+                Icon(Icons.Default.ArrowDropDown, "Expand", Modifier.clickable { onExpandChange(true) })
+            }
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { onExpandChange(false) }) {
+            options.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onSelect(index)
+                        onExpandChange(false)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        shape = RoundedCornerShape(10.dp)
+    )
 }
