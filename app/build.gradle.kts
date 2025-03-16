@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.androidx.navigation.compose.v240alpha10)
     implementation(libs.gson)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
