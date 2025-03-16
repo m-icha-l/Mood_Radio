@@ -1,56 +1,56 @@
 # Mood_Radio
 
-**Mood_Radio** to aplikacja mobilna, która pozwala użytkownikom słuchać radia online w zależności od ich nastroju. Aplikacja oferuje wybór ulubionych stacji radiowych oraz możliwość dodawania własnych stacji, umożliwiając spersonalizowanie doświadczenia słuchania muzyki. Dzięki integracji z ExoPlayer, aplikacja zapewnia płynne odtwarzanie stacji radiowych bez opóźnień.
+**Mood_Radio** is a mobile app that allows users to listen to online radio stations depending on their mood. The app offers a selection of favorite radio stations and the ability to add custom stations, enabling a personalized music listening experience. With integration with ExoPlayer, the app ensures smooth playback of radio stations without delays.
 
-## Funkcje
+## Features
 
-- **Wybór stacji radiowych**: Wybieraj z listy dostępnych stacji radiowych i słuchaj na żywo.
-- **Dodawanie własnych stacji**: Użytkownicy mogą dodać własne stacje radiowe przez podanie linku URL i nazwy.
-- **Zarządzanie stacjami**: Przechowywanie ulubionych stacji radiowych w aplikacji.
-- **Pauzowanie/odtwarzanie**: Umożliwia pauzowanie i kontynuowanie odtwarzania radia.
+- **Radio Station Selection**: Choose from a list of available radio stations and listen live.
+- **Add Custom Stations**: Users can add their own radio stations by providing a URL and name.
+- **Manage Stations**: Store your favorite radio stations within the app.
+- **Pause/Play**: Allows pausing and resuming radio playback.
 
-## Instalacja
+## Installation
 
-Aby zainstalować i uruchomić aplikację, wykonaj poniższe kroki:
+To install and run the app, follow these steps:
 
-1. **Pobierz projekt**
-   - Możesz pobrać projekt z GitHub, klonując repozytorium:
+1. **Download the Project**
+   - You can download the project from GitHub by cloning the repository:
      ```bash
-     git clone https://github.com/twoj-repozytorium/Mood_Radio.git
+     git clone https://github.com/your-repository/Mood_Radio.git
      ```
 
-2. **Zainstaluj Android Studio**
-   - Upewnij się, że masz zainstalowane Android Studio na swoim komputerze. Jeśli nie, pobierz je [tutaj](https://developer.android.com/studio).
+2. **Install Android Studio**
+   - Make sure you have Android Studio installed on your computer. If not, download it [here](https://developer.android.com/studio).
 
-3. **Otwórz projekt**
-   - Otwórz Android Studio i wybierz opcję **Open an existing Android Studio project**. Wybierz folder, w którym sklonowałeś projekt.
+3. **Open the Project**
+   - Open Android Studio and select the **Open an existing Android Studio project** option. Choose the folder where you cloned the project.
 
-4. **Zainstaluj zależności**
-   - Android Studio automatycznie zainstaluje wszystkie wymagane zależności, gdy otworzysz projekt po raz pierwszy. Upewnij się, że masz połączenie z internetem, aby pobrać wszystkie paczki.
+4. **Install Dependencies**
+   - Android Studio will automatically install all required dependencies when you open the project for the first time. Make sure you're connected to the internet to download all packages.
 
-5. **Uruchom aplikację**
-   - Podłącz urządzenie Android lub uruchom emulator. Naciśnij **Run** w Android Studio, aby uruchomić aplikację.
+5. **Run the App**
+   - Connect an Android device or run an emulator. Press **Run** in Android Studio to launch the app.
 
-## Technologie
+## Technologies
 
-- **Kotlin** – Język programowania użyty do napisania aplikacji.
-- **Jetpack Compose** – Framework UI do tworzenia nowoczesnych interfejsów użytkownika.
-- **ExoPlayer** – Framework do odtwarzania mediów, używany do odtwarzania radia online.
-- **SharedPreferences** – Używane do przechowywania danych użytkownika, takich jak ulubione stacje radiowe.
-- **JSON** – Format przechowywania danych o stacjach radiowych.
+- **Kotlin** – Programming language used to write the app.
+- **Jetpack Compose** – UI framework for creating modern user interfaces.
+- **ExoPlayer** – Media playback framework used to stream online radio.
+- **SharedPreferences** – Used to store user data, such as favorite radio stations.
+- **JSON** – Format for storing data about radio stations.
 
-## Struktura projektu
+## Project Structure
 
-- **`MainActivity.kt`**: Główna aktywność aplikacji. Zarządza nawigacją i UI.
-- **`Model_logic.kt`**: Logika aplikacji, która obsługuje dane o stacjach radiowych oraz odtwarzanie radia.
-- **`RadioPlayerScreen.kt`**: Ekran, na którym użytkownicy mogą wybierać stacje radiowe do odtwarzania.
-- **`First_Screen.kt`**: Ekran umożliwiający dodanie nowych stacji radiowych przez użytkownika.
+- **`MainActivity.kt`**: The main activity of the app. Manages navigation and the UI.
+- **`Model_logic.kt`**: The app's logic that handles radio station data and playback.
+- **`RadioPlayerScreen.kt`**: The screen where users can choose radio stations to play.
+- **`First_Screen.kt`**: The screen that allows users to add new radio stations.
 
-## Funkcjonalności
+## Functionality
 
 1. **RadioPlayerScreen**
-   - Użytkownicy mogą wybierać stacje z listy lub dodać własne.
-   - Przycisk Play/Pause umożliwia odtwarzanie lub zatrzymywanie radia.
+   - Users can choose stations from the list or add their own.
+   - The Play/Pause button allows users to play or stop the radio.
 
 2. **First_Screen**
-   - Umożliwia dodanie własnych stacji radiowych poprzez wprowadzenie URL i nazwy stacji.
+   - Allows users to add their own radio stations by entering the URL and name of the station.
