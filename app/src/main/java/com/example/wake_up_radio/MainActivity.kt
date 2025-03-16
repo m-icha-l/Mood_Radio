@@ -2,6 +2,7 @@ package com.example.wake_up_radio
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -108,11 +109,28 @@ fun RadioPlayerScreen(navController: NavController) {
 
     // Define a custom button height
     val buttonHeight = 56.dp
+
+    val radioError = myViewModel.radioError
+    var isDialogOpen by remember { mutableStateOf(false) }
+    var massage by remember { mutableStateOf("") }
+
+    if (radioError != null) {
+        Log.d("works","popup triggerd")
+        isDialogOpen = true
+        massage = "Link or Stream error"
+    }
+    Popup(
+        isDialogOpen = isDialogOpen,
+        onDismiss = {
+            isDialogOpen = false
+            myViewModel.radioError = null},
+        text = massage
+    )
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.background_day_1 else R.drawable.background_1 ), // Replace with your image resource
+            painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.background_day_1 else R.drawable.background_1 ),
             contentDescription = "Background",
-            contentScale = ContentScale.Crop, // This scales the image to fill the bounds while cropping if necessary
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
         Scaffold(
@@ -160,7 +178,10 @@ fun RadioPlayerScreen(navController: NavController) {
                     )
 
                     Button(
-                        onClick = { myViewModel.pause_play() },
+                        onClick =
+                        {
+                            myViewModel.pause_play()
+                        },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -212,9 +233,9 @@ fun FirstScreen(navController: NavController) {
     val buttonHeight = 56.dp
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.background_day_2 else R.drawable.background_2), // Replace with your image resource
+            painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.background_day_2 else R.drawable.background_2),
             contentDescription = "Background",
-            contentScale = ContentScale.Crop, // This scales the image to fill the bounds while cropping if necessary
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
         Scaffold(
@@ -258,9 +279,29 @@ fun FirstScreen(navController: NavController) {
                     Button(
                         onClick = {
                             if (isPlaying) myViewModel.pause_play()
-                            myViewModel.add_Radio_Station(userLink, userRadioName)
-                            isDialogOpen = true
-                            massage = "Radio added"
+                            if(validateRadioStreamUrl(userLink, false))
+                            {
+                                if(validateRadioStreamUrl(userRadioName, true))
+                                {
+                                    myViewModel.add_Radio_Station(userLink, userRadioName)
+                                    isDialogOpen = true
+                                    massage = "Radio added"
+                                }
+                                else
+                                {
+                                    userRadioName=""
+                                    isDialogOpen = true
+                                    massage = "Name has a bad syntax"
+                                }
+                            }
+                            else
+                            {
+                                userLink = ""
+                                userRadioName=""
+                                isDialogOpen = true
+                                massage = "Link or name has a bad syntax"
+                            }
+
                         },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier

@@ -1,16 +1,24 @@
 package com.example.wake_up_radio
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 data class RadioData(
     val radio_links: MutableList<String>,
@@ -21,6 +29,7 @@ class Model_logic(context: Context) : ViewModel() {
 
     var isPlaying by mutableStateOf(false)
     var radio_URL by mutableStateOf("https://wr2.downtime.fi/kaakko.aac")
+    var radioError by mutableStateOf<String?>(null)
     private val jsonFile = File(context.filesDir, "new_radios.json")
     private val gson = Gson()
 
@@ -33,19 +42,24 @@ class Model_logic(context: Context) : ViewModel() {
                 .build(),
             true
         )
+        addListener(object : Player.Listener {
+            override fun onPlayerError(error: PlaybackException) {
+                Log.d("works","got error")
+                radioError = "error"
+            }
+        })
         setMediaItem(MediaItem.fromUri(radio_URL))
         prepare()
     }
 
     private fun loadRadioData(): RadioData {
-        Log.d("works","hello:)")
         return if (jsonFile.exists()) {
 
             FileReader(jsonFile).use { reader ->
                 gson.fromJson(reader, RadioData::class.java) ?: RadioData(mutableListOf(), mutableListOf())
             }
         } else {
-            Log.d("works","hello:)_2")
+
             RadioData(mutableListOf(), mutableListOf())
         }
     }
@@ -107,4 +121,5 @@ class Model_logic(context: Context) : ViewModel() {
         }
         isPlaying = !isPlaying
     }
+
 }

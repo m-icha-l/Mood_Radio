@@ -22,7 +22,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+import java.util.regex.Pattern
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDropdownMenu(
@@ -94,7 +94,7 @@ fun Popup(isDialogOpen: Boolean, onDismiss: () -> Unit, text: String) {
     if (isDialogOpen) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text("Confirmation", style = MaterialTheme.typography.titleLarge) },
+            title = { Text("Mood Radio", style = MaterialTheme.typography.titleLarge) },
             text = { Text(text) },
             confirmButton = {
                 Button(onClick = onDismiss) {
@@ -105,4 +105,33 @@ fun Popup(isDialogOpen: Boolean, onDismiss: () -> Unit, text: String) {
             shape = MaterialTheme.shapes.medium
         )
     }
+}
+
+fun validateRadioStreamUrl(url: String, name: Boolean): Boolean {
+    // Step 1: Check if the URL starts with "http" or "https"
+    if(url=="")
+    {
+        return false
+    }
+    if(!name)
+    {
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return false
+        }
+
+        // Step 2: Validate URL using a regex pattern to ensure it only contains allowed characters.
+        val urlPattern = Pattern.compile("^[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]*\$")
+        if (!urlPattern.matcher(url).matches()) {
+            return false
+        }
+    }
+
+    // Step 3: Prevent potential injection patterns by looking for common SQL injection keywords
+    val disallowedPatterns = listOf("SELECT", "INSERT", "DROP", "DELETE", "--", "/*", "*/", "UNION", "OR", "AND")
+    for (pattern in disallowedPatterns) {
+        if (url.contains(pattern, ignoreCase = true)) {
+            return false
+        }
+    }
+    return true
 }
