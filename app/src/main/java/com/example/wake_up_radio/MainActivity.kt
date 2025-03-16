@@ -117,7 +117,7 @@ fun RadioPlayerScreen(navController: NavController) {
     if (radioError != null) {
         Log.d("works","popup triggerd")
         isDialogOpen = true
-        massage = "Link or Stream error"
+        massage = "Error: No internet or Bad Link"
     }
     Popup(
         isDialogOpen = isDialogOpen,
@@ -291,7 +291,7 @@ fun FirstScreen(navController: NavController) {
                                 {
                                     userRadioName=""
                                     isDialogOpen = true
-                                    massage = "Name has a bad syntax"
+                                    massage = "Error: Name has a bad syntax"
                                 }
                             }
                             else
@@ -299,7 +299,7 @@ fun FirstScreen(navController: NavController) {
                                 userLink = ""
                                 userRadioName=""
                                 isDialogOpen = true
-                                massage = "Link or name has a bad syntax"
+                                massage = "Error: Link or name has a bad syntax"
                             }
 
                         },
