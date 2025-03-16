@@ -3,6 +3,7 @@ package com.example.wake_up_radio
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -111,25 +112,13 @@ fun validateRadioStreamUrl(url: String, name: Boolean): Boolean {
     // Step 1: Check if the URL starts with "http" or "https"
     if(url=="")
     {
+        Log.d("works","1")
         return false
     }
     if(!name)
     {
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            return false
-        }
-
-        // Step 2: Validate URL using a regex pattern to ensure it only contains allowed characters.
-        val urlPattern = Pattern.compile("^[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]*\$")
-        if (!urlPattern.matcher(url).matches()) {
-            return false
-        }
-    }
-
-    // Step 3: Prevent potential injection patterns by looking for common SQL injection keywords
-    val disallowedPatterns = listOf("SELECT", "INSERT", "DROP", "DELETE", "--", "/*", "*/", "UNION", "OR", "AND")
-    for (pattern in disallowedPatterns) {
-        if (url.contains(pattern, ignoreCase = true)) {
+            Log.d("works","2")
             return false
         }
     }
