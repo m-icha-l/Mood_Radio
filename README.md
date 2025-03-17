@@ -1,3 +1,6 @@
+*LINK TO THE VIDEO: https://drive.google.com/file/d/1osTRrbdVoF-b6eIUdmz2XG7tcgQ1HgIq/view?usp=sharing*
+
+
 # Mood_Radio
 
 **Mood_Radio** is a mobile app that allows users to listen to online radio stations depending on their mood. The app offers a selection of favorite radio stations and the ability to add custom stations, enabling a personalized music listening experience. With integration with ExoPlayer, the app ensures smooth playback of radio stations without delays.
